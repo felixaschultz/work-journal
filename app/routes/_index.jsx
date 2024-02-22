@@ -81,6 +81,7 @@ export default function Index() {
       }
       <section className="w-1/2 m-auto mt-10">
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
+        console.log(entries),
         <div key={weekStart} className="p-6 mb-3 bg-slate-300 text-slate-700 text-slate-100 rounded-md">
           <h2 className="text-lg">Week of {weekStart}</h2>
           {
@@ -89,7 +90,12 @@ export default function Index() {
                 <h3 className="text-base font-bold">{type}</h3>
                 <ul className="pl-5 list-disc list-inside">
                   {entries.map((entry) => (
-                    <li key={entry._id} className="text-sm">{entry.text}</li>
+                    <>
+                      <li key={entry._id} className="text-sm">{entry.text}</li>
+                      {session.isAdmin && <Link to={`/edit/${entry._id}`} className="text-slate-500 p-2">Edit</Link>}
+                      {session.isAdmin && <Link to={`/delete/${entry._id}`} className="text-slate-500 p-2">Delete</Link>}
+                    </>
+
                   ))}
                 </ul>
               </div>
