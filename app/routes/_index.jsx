@@ -8,10 +8,14 @@ export async function loader() {
   const entries = await mongoose.models.Entry.find().sort({ date: -1 });
   const entriesByWeek = entries.reduce((acc, entry) => {
     const weekStart = format(startOfWeek(new Date(entry.date), {weekStartsOn: 1}), 'dd MMM yyyy');
+    const type = entry.type;
+
     if (!acc[weekStart]) {
-      acc[weekStart] = [];
+      acc[weekStart] = {};
     }
-    acc[weekStart].push(entry);
+    acc[weekStart][type] = acc[weekStart][type] || [];
+    acc[weekStart][type].push(entry);
+
     return acc;
   }, {});
   return json({ entriesByWeek });
@@ -55,15 +59,18 @@ export default function Index() {
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
         <div key={weekStart} className="p-6 mb-3 text-slate-100">
           <h2 className="text-lg">Week of {weekStart}</h2>
-          {entries.map(entry => (
-            <div className="flex items-center" key={entry._id}>
-              <p className="text-slate-500">{entry.type}</p>
-              <ul className="list-item ml-5">
-                <li className="text-slate-300">{entry.text}</li>
-              </ul>
-            </div>
-            
-          ))}
+          {
+            Object.entries(entries).map(([type, entries]) => (
+              <div key={type} className="mt-2">
+                <h3 className="text-base font-bold">{type}</h3>
+                <ul className="pl-5 list-disc list-inside">
+                  {entries.map((entry) => (
+                    <li key={entry._id} className="text-sm">{entry.text}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
         </div>
       ))}
       </section>
