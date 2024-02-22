@@ -55,9 +55,9 @@ export default function Index() {
           </button>
         </fetcher.Form>
       </fieldset>
-      <section className="grid grid-cols-2 gap-4 mt-5">
+      <section className="w-1/2 m-auto mt-5">
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
-        <div key={weekStart} className="p-6 mb-3 text-slate-100">
+        <div key={weekStart} className="p-6 mb-3 bg-slate-300 text-slate-700 text-slate-100 rounded-md">
           <h2 className="text-lg">Week of {weekStart}</h2>
           {
             Object.entries(entries).map(([type, entries]) => (
