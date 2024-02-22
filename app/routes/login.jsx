@@ -43,9 +43,9 @@ export async function action({ request }) {
         let session = await getSession();
         session.set("isAdmin", true);
         await commitSession(session);
-        return new Response("", {
+        return redirect("/", {
             headers: {
-              "Set-Cookie": await commitSession(session),
+              "Set-Cookie": await commitSession(session)
             },
           });
     }else{

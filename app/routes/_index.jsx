@@ -22,29 +22,29 @@ export async function loader({ request }) {
 
     return acc;
   }, {});
-  return json({ entriesByWeek, isAdmin: user.data });
+  return json({ entriesByWeek, session: user.data });
 }
 
 export default function Index() {
-  const { entriesByWeek, isAdmin } = useLoaderData();
+  const { entriesByWeek, session } = useLoaderData();
   const fetcher = useFetcher();
 
-  console.log(isAdmin);
+  console.log(session.isAdmin);
 
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
       <header className="grid grid-cols-2">
         <h1 className="text-3xl font-bold">Weekly Journal</h1>
         {
-          !isAdmin && 
+          !session.isAdmin && 
           <Link to="/login" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Login</Link>
         }
         {
-          isAdmin && 
+          session.isAdmin && 
           <Link to="/logout" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Logout</Link>
         }
       </header>
-      {isAdmin && 
+      {session.isAdmin && 
       <fieldset
           className="disabled:opacity-70"
           disabled={fetcher.state === "submitting"}
