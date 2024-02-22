@@ -53,7 +53,6 @@ export default function Index() {
       </fieldset>
       <section className="grid grid-cols-2 gap-4 mt-5">
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
-        console.log(entries),
         <div key={weekStart} className="p-6 mb-3 text-slate-100">
           <h2 className="text-lg">Week of {weekStart}</h2>
           {entries.map(entry => (
