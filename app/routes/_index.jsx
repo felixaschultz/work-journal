@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { useFetcher } from "@remix-run/react";
 import { startOfWeek, format } from 'date-fns';
 import { getSession } from "~/services/session";
-
+import { useRef, useEffect } from "react";
 
 export async function loader({ request }) {
   const user = await getSession(request.headers.get("Cookie"));
@@ -28,6 +28,14 @@ export async function loader({ request }) {
 export default function Index() {
   const { entriesByWeek, session } = useLoaderData();
   const fetcher = useFetcher();
+  let textRef = useRef();
+
+  useEffect(() => {
+    if (fetcher.state === "submitting" && textRef.current) {
+      textRef.current.value = "";
+      textRef.current.focus();
+    }
+  }, [fetcher.state]);
 
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
@@ -35,11 +43,11 @@ export default function Index() {
         <h1 className="text-3xl font-bold">Weekly Journal</h1>
         {
           !session.isAdmin && 
-          <Link to="/login" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Login</Link>
+          <Link to="/login" className="block min-w-max ml-auto w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Login</Link>
         }
         {
           session.isAdmin && 
-          <Link to="/logout" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Logout</Link>
+          <Link to="/logout" className="block min-w-max ml-auto w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Logout</Link>
         }
       </header>
       {session.isAdmin && 
@@ -63,7 +71,7 @@ export default function Index() {
           </span>
           <div className="pt-3 pb-2 col-span-3">
             <label className="block text-slate-500" htmlFor="text">Text</label>
-            <textarea className="w-full p-1 h-20 text-slate-400" id="text" name="text" required />
+            <textarea ref={textRef} className="w-full p-1 h-20 text-slate-400" id="text" name="text" required />
           </div>
           <button className="rounded-md w-full bg-slate-500 p-2 disabled:bg-slate-50 items-end" type="submit" disabled={fetcher.state === "submitting"}>
             {fetcher.state === "submitting" ? "Saving..." : "Save"}
