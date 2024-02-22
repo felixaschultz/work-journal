@@ -37,7 +37,7 @@ export default function Index() {
         }
         {
           user && 
-          <Link to="/logout" className="block p-2 text-slate-500 bg-slate-400">Logout</Link>
+          <Link to="/logout" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Logout</Link>
         }
       </header>
       {user && 
