@@ -34,5 +34,8 @@ export default function Login(){
 }
 
 export function action({request}){
-
+    return authenticator.authenticate("user-pass", request, {
+        successRedirect: "/",
+        failureRedirect: "/login",
+    });
 }
