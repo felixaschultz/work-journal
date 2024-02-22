@@ -47,7 +47,7 @@ export async function action({ request }) {
             headers: {
               "Set-Cookie": await commitSession(session)
             },
-          });
+        });
     }else{
         return "Unauthorized";
     }
