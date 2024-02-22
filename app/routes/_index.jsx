@@ -35,6 +35,10 @@ export default function Index() {
           !user && 
           <Link to="/login" className="block p-2 text-slate-500">Login</Link>
         }
+        {
+          user && 
+          <Link to="/logout" className="block p-2 text-slate-500">Logout</Link>
+        }
       </header>
       {user && 
       <fieldset

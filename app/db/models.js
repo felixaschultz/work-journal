@@ -25,7 +25,7 @@ const entrySchema = new Schema(
 );
 
 // User Schema
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     image: String,
     mail: {
@@ -74,3 +74,28 @@ export const models = [
     collection: "users"
   }
 ];
+export async function initData() {
+  // check if data exists
+  const userCount = await mongoose.models.User.countDocuments();
+  const postCount = await mongoose.models.Post.countDocuments();
+
+  if (userCount === 0 || postCount === 0) {
+    await insertData();
+  }
+}
+
+async function insertData() {
+  const User = mongoose.models.User;
+
+  console.log("Dropping collections...");
+  await User.collection.drop();
+
+  await User.create({
+    mail: "felix.schultz@engapho.com",
+    password: "password",
+    name: "Felix Schultz",
+    title: "Software Engineer",
+    educations: ["BSc. Computer Science"],
+    image: "https://avatars.githubusercontent.com/u/166230"
+  });
+}
