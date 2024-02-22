@@ -29,8 +29,6 @@ export default function Index() {
   const { entriesByWeek, session } = useLoaderData();
   const fetcher = useFetcher();
 
-  console.log(session.isAdmin);
-
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
       <header className="grid grid-cols-2">
