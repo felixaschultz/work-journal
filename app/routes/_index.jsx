@@ -3,10 +3,12 @@ import { Link, useLoaderData } from "@remix-run/react";
 import mongoose from "mongoose";
 import { useFetcher } from "@remix-run/react";
 import { startOfWeek, format } from 'date-fns';
-import { authenticator } from "~/services/auth.server";
+import { getSession } from "~/services/session";
+
 
 export async function loader({ request }) {
-  const user = await authenticator.isAuthenticated(request);
+  const user = await getSession(request.headers.get("Cookie"));
+
   const entries = await mongoose.models.Entry.find().sort({ date: -1 });
   const entriesByWeek = entries.reduce((acc, entry) => {
     const weekStart = format(startOfWeek(new Date(entry.date), {weekStartsOn: 1}), 'dd MMM yyyy');
@@ -20,27 +22,29 @@ export async function loader({ request }) {
 
     return acc;
   }, {});
-  return json({ entriesByWeek, user });
+  return json({ entriesByWeek, isAdmin: user.data });
 }
 
 export default function Index() {
-  const { entriesByWeek, user } = useLoaderData();
+  const { entriesByWeek, isAdmin } = useLoaderData();
   const fetcher = useFetcher();
+
+  console.log(isAdmin);
 
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
       <header className="grid grid-cols-2">
         <h1 className="text-3xl font-bold">Weekly Journal</h1>
         {
-          !user && 
+          !isAdmin && 
           <Link to="/login" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Login</Link>
         }
         {
-          user && 
+          isAdmin && 
           <Link to="/logout" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Logout</Link>
         }
       </header>
-      {user && 
+      {isAdmin && 
       <fieldset
           className="disabled:opacity-70"
           disabled={fetcher.state === "submitting"}
