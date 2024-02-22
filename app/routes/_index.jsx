@@ -3,8 +3,10 @@ import { useLoaderData } from "@remix-run/react";
 import mongoose from "mongoose";
 import { useFetcher } from "@remix-run/react";
 import { startOfWeek, format } from 'date-fns';
+import { authenticator } from "~/services/auth.server";
 
-export async function loader() {
+export async function loader({ request }) {
+  const user = await authenticator.isAuthenticated(request);
   const entries = await mongoose.models.Entry.find().sort({ date: -1 });
   const entriesByWeek = entries.reduce((acc, entry) => {
     const weekStart = format(startOfWeek(new Date(entry.date), {weekStartsOn: 1}), 'dd MMM yyyy');
@@ -18,16 +20,19 @@ export async function loader() {
 
     return acc;
   }, {});
-  return json({ entriesByWeek });
+  return json({ entriesByWeek, user });
 }
 
 export default function Index() {
-  const { entriesByWeek } = useLoaderData();
+  const { entriesByWeek, user } = useLoaderData();
   const fetcher = useFetcher();
+
+  console.log(user);
 
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
       <h1 className="text-3xl font-bold">Weekly Journal</h1>
+      {user && 
       <fieldset
           className="disabled:opacity-70"
           disabled={fetcher.state === "submitting"}
@@ -55,13 +60,14 @@ export default function Index() {
           </button>
         </fetcher.Form>
       </fieldset>
-      <section className="w-1/2 m-auto mt-5">
+      }
+      <section className="w-1/2 m-auto mt-10">
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
         <div key={weekStart} className="p-6 mb-3 bg-slate-300 text-slate-700 text-slate-100 rounded-md">
           <h2 className="text-lg">Week of {weekStart}</h2>
           {
             Object.entries(entries).map(([type, entries]) => (
-              <div key={type} className="mt-2">
+              <div key={type} className="mt-3">
                 <h3 className="text-base font-bold">{type}</h3>
                 <ul className="pl-5 list-disc list-inside">
                   {entries.map((entry) => (
