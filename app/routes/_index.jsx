@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import mongoose from "mongoose";
 import { useFetcher } from "@remix-run/react";
 import { startOfWeek, format } from 'date-fns';
@@ -29,7 +29,13 @@ export default function Index() {
 
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
-      <h1 className="text-3xl font-bold">Weekly Journal</h1>
+      <header className="grid grid-cols-2">
+        <h1 className="text-3xl font-bold">Weekly Journal</h1>
+        {
+          !user && 
+          <Link to="/login" className="block p-2 text-slate-500">Login</Link>
+        }
+      </header>
       {user && 
       <fieldset
           className="disabled:opacity-70"
