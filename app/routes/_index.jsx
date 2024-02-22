@@ -23,42 +23,45 @@ export default function Index() {
 
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
+      <h1 className="text-3xl font-bold">Weekly Journal</h1>
       <fetcher.Form method="post">
       <fieldset
-        className="disabled:opacity-70"
+        className="grid grid-cols-2 disabled:opacity-70"
         disabled={fetcher.state === "submitting"}
       >
-          <div>
-            <label htmlFor="date">Date</label>
-            <input type="date" id="date" name="date" required />
+          <div className="p-2">
+            <label className="block text-slate-500" htmlFor="date">Date</label>
+            <input className="text-slate-500 w-full p-1" type="date" id="date" name="date" required />
           </div>
-          <div>
-            <label htmlFor="type">Type</label>
-            <select id="type" name="type" required>
+          <div className="p-2">
+            <label className="block text-slate-500" htmlFor="type">Type</label>
+            <select className="text-slate-500 w-full p-1" id="type" name="type" required>
               <option value="work">Work</option>
               <option value="learning">Learning</option>
               <option value="interesting-thing">Interesting Thing</option>
             </select>
           </div>
-          <div>
-            <label htmlFor="text">Text</label>
-            <textarea id="text" name="text" required />
+          <div className="p-2 col-span-3">
+            <label className="block text-slate-500" htmlFor="text">Text</label>
+            <textarea className="w-full p-1 h-20 text-slate-400" id="text" name="text" required />
           </div>
         </fieldset>
-        <button type="submit" disabled={fetcher.state === "submitting"}>
+        <button className="bg-slate-500 p-2" type="submit" disabled={fetcher.state === "submitting"}>
           {fetcher.state === "submitting" ? "Saving..." : "Save"}
         </button>
       </fetcher.Form>
+      <section className="grid grid-cols-2 gap-4 mt-5">
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
-        <div key={weekStart}>
-          <h2>Week of {weekStart}</h2>
+        <div key={weekStart} className="p-6 mb-3 text-slate-500">
+          <h2 className="text-lg">Week of {weekStart}</h2>
           {entries.map(entry => (
-            <div key={entry._id}>
+            <div className="ml-3" key={entry._id}>
               <p>{entry.text}</p>
             </div>
           ))}
         </div>
       ))}
+      </section>
     </div>
   );
 }
