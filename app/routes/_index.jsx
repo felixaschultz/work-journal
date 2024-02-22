@@ -33,11 +33,11 @@ export default function Index() {
         <h1 className="text-3xl font-bold">Weekly Journal</h1>
         {
           !user && 
-          <Link to="/login" className="block p-2 text-slate-500">Login</Link>
+          <Link to="/login" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Login</Link>
         }
         {
           user && 
-          <Link to="/logout" className="block p-2 text-slate-500">Logout</Link>
+          <Link to="/logout" className="block p-2 text-slate-500 bg-slate-400">Logout</Link>
         }
       </header>
       {user && 
