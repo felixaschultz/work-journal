@@ -27,8 +27,6 @@ export default function Index() {
   const { entriesByWeek, user } = useLoaderData();
   const fetcher = useFetcher();
 
-  console.log(user);
-
   return (
     <div className="p-8 text-slate-50 bg-slate-900">
       <h1 className="text-3xl font-bold">Weekly Journal</h1>
