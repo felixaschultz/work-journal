@@ -10,7 +10,7 @@ import {
 import styles from "./tailwind.css";
 import { getSession, destroySession } from "~/services/session";
 import { useLoaderData } from "@remix-run/react";
-import { Form } from "@remix-run/react";
+import { Form, useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 
 export const links = () => [
@@ -70,4 +70,32 @@ export async function action({ request }) {
       "Set-Cookie": await destroySession(session),
     },
   });
+}
+
+export function ErrorBoundary() {
+  let error = useRouteError();
+
+  console.log(error);
+  return (
+    <html lang="en" className="h-full">
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body className="flex h-full flex-col items-center justify-center">
+        <p className="text-3xl">Whoops!</p>
+        {isRouteErrorResponse(error) ? (
+          <p>
+            {error.status} – {error.statusText}
+          </p>
+        ) : error instanceof Error ? (
+          <p>{error.message}</p>
+        ) : (
+          <p>Something happened.</p>
+        )}
+        <Scripts />
+      </body>
+    </html>
+  );
 }

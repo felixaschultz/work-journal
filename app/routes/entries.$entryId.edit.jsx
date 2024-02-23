@@ -45,7 +45,10 @@ export default function Page() {
 export const action = async ({ request, params }) => {
     let session = await getSession(request.headers.get("cookie"));
     if (!session.data.isAdmin) {
-        throw new Response("Not authenticated", { status: 401 });
+        throw new Response("Not authenticated", {
+            status: 401,
+            statusText: "Not authenticated",
+        });
     }
     const { ObjectId } = mongoose.Types;
     if (!ObjectId.isValid(params.entryId)) {
