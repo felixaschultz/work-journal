@@ -43,7 +43,7 @@ export default function Page() {
 
 export const action = async ({ request, params }) => {
     const { ObjectId } = mongoose.Types;
-    if (typeof params.entryId !== "string" || !ObjectId.isValid(params.entryId)) {
+    if (!ObjectId.isValid(params.entryId)) {
         throw new Response("Not found", { status: 404 });
     }
     
