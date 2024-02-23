@@ -6,7 +6,6 @@ export default function EntryForm({ entry }){
     const fetcher = useFetcher();
     let textRef = useRef();
 
-
     return <>
         <fieldset
           className="disabled:opacity-70"

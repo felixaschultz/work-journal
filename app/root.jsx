@@ -74,8 +74,6 @@ export async function action({ request }) {
 
 export function ErrorBoundary() {
   let error = useRouteError();
-
-  console.log(error);
   return (
     <html lang="en" className="h-full">
       <head>
