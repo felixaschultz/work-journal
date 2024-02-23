@@ -74,20 +74,7 @@ export default function Index() {
           <h2 className="text-lg">Week of {weekStart}</h2>
           {
             Object.entries(entries).map(([type, entries]) => (
-              <div key={type} className="mt-3">
-                <h3 className="text-base font-bold">{type}</h3>
-                <ul className="pl-5 list-disc list-inside">
-                  {entries.map((entry) => (
-                    <>
-                      <li key={entry._id} className="text-sm group">
-                        {entry.text}
-                        {session.isAdmin && <Link to={`/entries/${entry._id}/edit`} className="text-slate-500 p-2 opacity-0 group-hover:opacity-70">Edit</Link>}
-                      </li>
-                    </>
-
-                  ))}
-                </ul>
-              </div>
+              <EntryItem key={type} entry={entries} type={type} session={session} />
             ))
           }
         </div>
@@ -106,3 +93,22 @@ export const action = async ({ request }) => {
   // Save to MongoDB
   return await mongoose.models.Entry.create({ date, type, text });
 };
+
+function EntryItem({ entry, type, session }) {
+  return (
+    <div className="mt-3">
+      <h3 className="text-base font-bold">{type}</h3>
+      <ul className="pl-5 list-disc list-inside">
+        {entry.map((entry) => (
+          <>
+            <li key={entry._id} className="text-sm group">
+              {entry.text}
+              {session.isAdmin && <Link to={`/entries/${entry._id}/edit`} className="text-slate-500 p-2 opacity-0 group-hover:opacity-70">Edit</Link>}
+            </li>
+          </>
+
+        ))}
+      </ul>
+    </div>
+  );
+}
