@@ -8,8 +8,10 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import styles from "./tailwind.css";
-import { getSession } from "~/services/session";
+import { getSession, destroySession } from "~/services/session";
 import { useLoaderData } from "@remix-run/react";
+import { Form } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
 
 export const links = () => [
   {
@@ -46,7 +48,9 @@ export default function App() {
           }
           {
             session.isAdmin && 
-            <Link to="/logout" className="block min-w-max ml-auto w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Logout</Link>
+            <Form method="post">
+              <button className="block min-w-max ml-auto w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Logout</button>
+            </Form>
           }
         </header>
         <Outlet />
@@ -56,4 +60,14 @@ export default function App() {
       </body>
     </html>
   );
+}
+
+export async function action({ request }) {
+  let session = await getSession(request.headers.get("cookie"));
+
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await destroySession(session),
+    },
+  });
 }
