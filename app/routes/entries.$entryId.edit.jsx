@@ -28,7 +28,7 @@ export default function Page() {
         <div className="p-8 text-slate-50 lg:w-1/2 sm:w-full m-auto mt-10">
             <section className="grid grid-cols-2 p-4">
                 <Link to="/" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Back</Link>
-                <Form method="delete" onSubmit={handleSubmit} >
+                <Form method="post" onSubmit={handleSubmit} >
                     <button name="_action"
                         value="delete"
                         className="text-gray-100 underline">
