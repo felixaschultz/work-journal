@@ -1,9 +1,8 @@
 import { Form, useLoaderData, Link, useActionData} from "@remix-run/react";
 import { commitSession, getSession } from "~/services/session";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import { redirect, json } from "@remix-run/node";
-import { is } from "date-fns/locale";
 
 export default function Login(){
     let data = useLoaderData();
@@ -35,21 +34,24 @@ export default function Login(){
 
 export async function action({ request }) {
     let formData = await request.formData();
-    let { email, password } = Object.fromEntries(formData);
-    /* const mail = request.body.get("mail"); */
-    /* const password = request.body.get("password"); */
-    const user = await mongoose.models.User.findOne({ email }).select("+password");
-    /* const isPasswordValid = await bcrypt.compare(password, user.password); */
-    user.password = undefined;
-    let error;
+    const mail = formData.get("mail");
+    const password = formData.get("password");
 
-    /* if(!isPasswordValid){
+    const user = await mongoose.models.User.findOne({ mail }).select("+password");
+    let error;
+    if(!user){
+        error = "Bad credentials";
+    }
+    const isPasswordValid = await bcrypt.compare(password, user?.password);
+    user.password = undefined;
+
+    if(!isPasswordValid){
         error = "Bad credentials";
     }else{
         error = null;
-    } */
+    }
 
-    if(user && !error){
+    if(user && !error && isPasswordValid){
         let session = await getSession();
         session.set("isAdmin", true);
         await commitSession(session);
