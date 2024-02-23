@@ -79,8 +79,10 @@ export default function Index() {
                 <ul className="pl-5 list-disc list-inside">
                   {entries.map((entry) => (
                     <>
-                      <li key={entry._id} className="text-sm">{entry.text}</li>
-                      {session.isAdmin && <Link to={`/entries/${entry._id}/edit`} className="text-slate-500 p-2">Edit</Link>}
+                      <li key={entry._id} className="text-sm group">
+                        {entry.text}
+                        {session.isAdmin && <Link to={`/entries/${entry._id}/edit`} className="text-slate-500 p-2 opacity-0 group-hover:opacity-70">Edit</Link>}
+                      </li>
                     </>
 
                   ))}
