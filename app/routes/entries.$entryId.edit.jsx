@@ -54,13 +54,15 @@ export const action = async ({ request, params }) => {
   
     // Save to MongoDB
     if (_action === "delete") {
-        await mongoose.models.Entry.deleteOne({ _id: new ObjectId(params.entryId) });
+        await mongoose.models.Entry.findByIdAndDelete(params.entryId);
         return redirect("/");
     }else{
-        await mongoose.models.Entry.updateOne(
-            { _id: new ObjectId(params.entryId) },
-            { date: new Date(date), type, text }
-        );
+        const entry = await mongoose.models.Entry.findById(params.entryId);
+        entry.date = new Date(formData.get("date"));
+        entry.type = formData.get("type");
+        entry.text = formData.get("text");
+        
+        await entry.save();
         return redirect(`/entries/${params.entryId}/edit`);
     }
 };
