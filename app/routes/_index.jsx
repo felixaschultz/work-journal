@@ -85,7 +85,7 @@ function EntryItem({ entry, type, session }) {
           <>
             <li key={entry._id} className="text-sm group">
               {entry.text}
-              {session.isAdmin && <Link to={`/entries/${entry._id}/edit`} className="text-slate-500 p-2 opacity-0 group-hover:opacity-70">Edit</Link>}
+              {session.isAdmin && <Link to={`/entries/${entry._id}/edit`} className="text-slate-100 transition-opacity rounded-md p-2 bg-slate-500 ml-10 opacity-0 group-hover:opacity-70">Edit</Link>}
             </li>
           </>
 
