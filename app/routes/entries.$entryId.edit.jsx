@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, redirect, useLoaderData } from "@remix-run/react";
 import EntryForm from "~/components/EntryForm";
+import { Form } from "@remix-run/react";
 
 const ObjectId = mongoose.Types.ObjectId;
 export const loader = async ({ params }) => {
@@ -27,7 +28,15 @@ export default function Page() {
             <Link to="/" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Back</Link>
             <h2 className="text-lg my-2">Editing Entry { entry._id }</h2>
             <h1 className="text-2xl">{entry.text}</h1>
+            <p>Type: {entry.type}</p>
             <EntryForm entry={entry} />
+            <Form method="delete" onSubmit={handleSubmit} >
+                <button name="_action"
+                    value="delete"
+                    className="text-gray-500 underline">
+                Delete this entry...
+                </button>
+            </Form>
         </div>
     );
 }
@@ -39,13 +48,25 @@ export const action = async ({ request, params }) => {
     }
     
     const formData = await request.formData();
-    const { date, type, text } = Object.fromEntries(formData);
+    const { _action, date, type, text } = Object.fromEntries(formData);
   
     await new Promise((resolve) => setTimeout(resolve, 1000));
   
     // Save to MongoDB
-    return await mongoose.models.Entry.updateOne(
-        { _id: new ObjectId(params.entryId) },
-        { date: new Date(date), type, text }
-    );
+    if (_action === "delete") {
+        await mongoose.models.Entry.deleteOne({ _id: new ObjectId(params.entryId) });
+        return redirect("/");
+    }else{
+        await mongoose.models.Entry.updateOne(
+            { _id: new ObjectId(params.entryId) },
+            { date: new Date(date), type, text }
+        );
+        return redirect(`/entries/${params.entryId}/edit`);
+    }
 };
+
+function handleSubmit(e){
+    if (!confirm("Are you sure?")) {
+        e.preventDefault();
+    }
+}
