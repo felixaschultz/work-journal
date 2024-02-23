@@ -60,6 +60,10 @@ export default function Index() {
 }
 
 export const action = async ({ request }) => {
+  let session = await getSession(request.headers.get("cookie"));
+  if (!session.data.isAdmin) {
+    throw new Response("Not authenticated", { status: 401 });
+  }
   const formData = await request.formData();
   const { date, type, text } = Object.fromEntries(formData);
 

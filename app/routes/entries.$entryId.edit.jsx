@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { Link, redirect, useLoaderData } from "@remix-run/react";
 import EntryForm from "~/components/EntryForm";
 import { Form } from "@remix-run/react";
+import { getSession } from "~/services/session";
 
 const ObjectId = mongoose.Types.ObjectId;
 export const loader = async ({ params }) => {
@@ -42,6 +43,10 @@ export default function Page() {
 }
 
 export const action = async ({ request, params }) => {
+    let session = await getSession(request.headers.get("cookie"));
+    if (!session.data.isAdmin) {
+        throw new Response("Not authenticated", { status: 401 });
+    }
     const { ObjectId } = mongoose.Types;
     if (!ObjectId.isValid(params.entryId)) {
         throw new Response("Not found", { status: 404 });
