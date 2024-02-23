@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import { Link, useLoaderData } from "@remix-run/react";
 import EntryForm from "~/components/EntryForm";
 
+const ObjectId = mongoose.Types.ObjectId;
 export const loader = async ({ params }) => {
-    const ObjectId = mongoose.Types.ObjectId;
     if (typeof params.entryId !== "string" || !ObjectId.isValid(params.entryId)) {
         throw new Response("Not found", { status: 404 });
     }
@@ -31,3 +31,21 @@ export default function Page() {
         </div>
     );
 }
+
+export const action = async ({ request, params }) => {
+    const { ObjectId } = mongoose.Types;
+    if (typeof params.entryId !== "string" || !ObjectId.isValid(params.entryId)) {
+        throw new Response("Not found", { status: 404 });
+    }
+    
+    const formData = await request.formData();
+    const { date, type, text } = Object.fromEntries(formData);
+  
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  
+    // Save to MongoDB
+    return await mongoose.models.Entry.updateOne(
+        { _id: new ObjectId(params.entryId) },
+        { date: new Date(date), type, text }
+    );
+};
