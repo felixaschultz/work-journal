@@ -7,10 +7,10 @@ import { redirect } from "@remix-run/node";
 export default function Login(){
     return (
         <>
+            <header className="grid grid-cols-2 bg-slate-900 p-2">
+                <h1 className="text-3xl font-bold text-slate-50">Weekly Journal</h1>
+            </header>
             <div className="grid place-content-center place-items-center h-screen p-8 text-slate-50 bg-slate-900">
-                <header className="grid grid-cols-2">
-                    <h1 className="text-3xl font-bold">Weekly Journal</h1>
-                </header>
                 <section className="w-full m-auto mt-10">
                     <h2 className="text-2xl">Login</h2>
                     <Form method="post">
