@@ -5,6 +5,7 @@ import { useFetcher } from "@remix-run/react";
 import { startOfWeek, format } from 'date-fns';
 import { getSession } from "~/services/session";
 import { useRef, useEffect } from "react";
+import EntryForm from "~/components/EntryForm";
 
 export async function loader({ request }) {
   const user = await getSession(request.headers.get("Cookie"));
@@ -40,33 +41,7 @@ export default function Index() {
   return (
     <div className="p-8 text-slate-50">
       {session.isAdmin && 
-      <fieldset
-          className="disabled:opacity-70"
-          disabled={fetcher.state === "submitting"}
-        >
-        <fetcher.Form method="post" className="w-1/2 m-auto rounded-md border-solid border-2 border-slate-500 border-ra p-4 mt-4">
-          <div className="pt-2 pb-2">
-            <label className="block text-slate-500" htmlFor="date">Date</label>
-            <input className="text-slate-500 p-2" defaultValue={format(new Date(), 'yyyy-MM-dd')} type="date" id="date" name="date" required />
-          </div>
-          <span className="">
-            <input defaultChecked type="radio" name="type" value="work" id="work" required /> <label className="text-slate-500" htmlFor="work">Work</label>
-          </span>
-          <span className="ml-5">
-            <input type="radio" name="type" value="learning" id="learning" required /> <label className="text-slate-500" htmlFor="learning">Learning</label>
-          </span>
-          <span className="ml-5">
-            <input type="radio" name="type" value="interesting-thing" id="interesting" required /> <label className="text-slate-500" htmlFor="interesting">Interesting Thing</label>
-          </span>
-          <div className="pt-3 pb-2 col-span-3">
-            <label className="block text-slate-500" htmlFor="text">Text</label>
-            <textarea ref={textRef} className="w-full p-1 h-20 text-slate-400" id="text" name="text" required />
-          </div>
-          <button className="rounded-md w-full bg-slate-500 p-2 disabled:bg-slate-50 items-end" type="submit" disabled={fetcher.state === "submitting"}>
-            {fetcher.state === "submitting" ? "Saving..." : "Save"}
-          </button>
-        </fetcher.Form>
-      </fieldset>
+        <EntryForm />
       }
       <section className="w-1/2 m-auto mt-10">
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
@@ -98,7 +73,7 @@ function EntryItem({ entry, type, session }) {
   return (
     <div className="mt-3">
       <h3 className="text-base font-bold">{type}</h3>
-      <ul className="pl-5 list-disc list-inside">
+      <ul className="pl-5 list-inside">
         {entry.map((entry) => (
           <>
             <li key={entry._id} className="text-sm group">
