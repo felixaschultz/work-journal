@@ -43,7 +43,7 @@ export default function Index() {
       {session.isAdmin && 
         <EntryForm />
       }
-      <section className="lg:w-1/2 sm:w-full m-auto mt-10">
+      <section className="lg:grid sm:block grid-cols-2 gap-3 lg:w-1/2 sm:w-full m-auto mt-10">
       {Object.entries(entriesByWeek).map(([weekStart, entries]) => (
         <div key={weekStart} className="p-6 mb-3 bg-slate-300 text-slate-700 text-slate-100 rounded-md">
           <h2 className="text-lg">Week of {weekStart}</h2>
