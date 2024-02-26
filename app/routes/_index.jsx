@@ -79,7 +79,7 @@ export const action = async ({ request }) => {
 function EntryItem({ entry, type, session }) {
   return (
     <div className="mt-3">
-      <h3 className="text-base font-bold">{type}</h3>
+      <h3 className="text-base font-bold">{type?.replace("-", " ")}</h3>
       <ul className="pl-5 list-inside">
         {entry.map((entry) => (
           <>
