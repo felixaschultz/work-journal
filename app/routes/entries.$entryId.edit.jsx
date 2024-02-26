@@ -36,6 +36,14 @@ export default function Page() {
         <div className="p-8 text-slate-50 lg:w-1/2 sm:w-full m-auto mt-10">
             <section className="grid grid-cols-2 p-4">
                 <Link to="/" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Back</Link>
+                <Form method="post" onSubmit={handleSubmit}>
+                    <button name="_action"
+                        value="update"
+                        className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md"
+                    >
+                        Publish
+                    </button>
+                </Form>
                 <Form className="text-right" method="post" onSubmit={handleSubmit} >
                     <button name="_action"
                         value="delete"
@@ -45,6 +53,8 @@ export default function Page() {
                 </Form>
             </section>
             <h2 className="text-lg my-2">Editing Entry { entry._id }</h2>
+            <p>Date: {entry.date}</p>
+            <p>Published: {entry.published ?? "false"}</p>
             <h1 className="text-2xl">{entry.text}</h1>
             <p>Type: {entry.type?.replace("-", " ")}</p>
             <EntryForm entry={entry} />
@@ -74,6 +84,11 @@ export const action = async ({ request, params }) => {
     if (_action === "delete") {
         await mongoose.models.Entry.findByIdAndDelete(params.entryId);
         return redirect("/");
+    }else if(_action === "update"){
+        const entry = await mongoose.models.Entry.findById(params.entryId);
+        entry.published = true;
+        await entry.save();
+        return redirect(`/entries/${params.entryId}/edit`);
     }else{
         const entry = await mongoose.models.Entry.findById(params.entryId);
         entry.date = new Date(formData.get("date"));
@@ -84,6 +99,7 @@ export const action = async ({ request, params }) => {
         return redirect(`/entries/${params.entryId}/edit`);
     }
 };
+
 
 function handleSubmit(e){
     if (!confirm("Are you sure?")) {

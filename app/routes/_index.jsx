@@ -9,8 +9,11 @@ import EntryForm from "~/components/EntryForm";
 
 export async function loader({ request }) {
   const user = await getSession(request.headers.get("Cookie"));
+  const view = user.data.isAdmin ? true : false;
 
-  const entries = await mongoose.models.Entry.find().sort({ date: -1 });
+  const entries = await mongoose.models.Entry.find(
+    (view ? {} : { published: true }),
+  ).sort({ date: -1 });
   const entriesByWeek = entries.reduce((acc, entry) => {
     const weekStart = format(startOfWeek(new Date(entry.date), {weekStartsOn: 1}), 'dd MMM yyyy');
     const type = entry.type;
