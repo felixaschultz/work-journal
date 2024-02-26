@@ -82,11 +82,15 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body className="flex h-full flex-col items-center justify-center">
+
         <p className="text-3xl">Whoops!</p>
         {isRouteErrorResponse(error) ? (
-          <p>
-            {error.status} – {error.statusText}
-          </p>
+          <>
+            <p>
+              {error.status} – {error.statusText}
+              {error.status === 401 && (<Link to="/login" className="block min-w-max m-auto my-3 w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Login</Link>)}
+            </p>
+          </>
         ) : error instanceof Error ? (
           <p>{error.message}</p>
         ) : (
