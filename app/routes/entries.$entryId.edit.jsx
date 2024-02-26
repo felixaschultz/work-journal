@@ -39,24 +39,22 @@ export default function Page() {
                 <Form method="post" onSubmit={handleSubmit}>
                     <button name="_action"
                         value="update"
-                        className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md"
+                        className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md ml-auto"
                     >
                         Publish
                     </button>
                 </Form>
-                <Form className="text-right" method="post" onSubmit={handleSubmit} >
-                    <button name="_action"
-                        value="delete"
-                        className="text-gray-100 underline">
-                        Delete this entry...
-                    </button>
-                </Form>
             </section>
+            <Form className="text-left" method="post" onSubmit={handleSubmit} >
+                <button name="_action"
+                    value="delete"
+                    className="text-gray-100 underline">
+                    Delete this entry...
+                </button>
+            </Form>
             <h2 className="text-lg my-2">Editing Entry { entry._id }</h2>
-            <p>Date: {entry.date}</p>
-            <p>Published: {(entry.published) ? "Offentlig" : "Draft"}</p>
             <h1 className="text-2xl">{entry.text}</h1>
-            <p>Type: {entry.type?.replace("-", " ")}</p>
+            <p>Published: {(entry.published) ? "Offentlig" : "Draft"}</p>
             <EntryForm entry={entry} />
         </div>
     );
