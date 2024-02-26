@@ -63,7 +63,7 @@ export default function App() {
 }
 
 export async function action({ request }) {
-  let session = await getSession(request.headers.get("cookie"));
+  const session = await getSession(request.headers.get("cookie"));
 
   return redirect("/", {
     headers: {
