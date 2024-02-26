@@ -53,7 +53,7 @@ export default function Page() {
 }
 
 export const action = async ({ request, params }) => {
-    let session = await getSession(request.headers.get("cookie"));
+    const session = await getSession(request.headers.get("cookie"));
     if (!session.data.isAdmin) {
         throw new Response("Not authenticated", {
             status: 401,
