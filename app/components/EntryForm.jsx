@@ -1,10 +1,17 @@
 import { format } from 'date-fns';
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 
 export default function EntryForm({ entry }){
     const fetcher = useFetcher();
     let textRef = useRef();
+
+    useEffect(() => {
+      if (fetcher.state === "submitting" && textRef.current) {
+        textRef.current.value = "";
+        textRef.current.focus();
+      }
+    }, [fetcher.state]);
 
     return <>
         <fieldset
