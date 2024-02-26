@@ -1,7 +1,7 @@
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, redirect } from "@remix-run/react";
 import mongoose from "mongoose";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, Form } from "@remix-run/react";
 import { startOfWeek, format } from 'date-fns';
 import { getSession } from "~/services/session";
 import { useRef, useEffect } from "react";
@@ -70,6 +70,7 @@ export const action = async ({ request }) => {
         statusText: "Not authenticated",
     });
   }
+  
   const formData = await request.formData();
   const { date, type, text } = Object.fromEntries(formData);
 
@@ -80,6 +81,7 @@ export const action = async ({ request }) => {
 };
 
 function EntryItem({ entry, type, session }) {
+  const fetcher = useFetcher();
   return (
     <div className="mt-3">
       <h3 className="text-base font-bold">{type?.replace("-", " ")}</h3>
@@ -88,7 +90,11 @@ function EntryItem({ entry, type, session }) {
           <>
             <li key={entry._id} className="text-sm group">
               {entry.text}
-              {session.isAdmin && <Link to={`/entries/${entry._id}/edit`} className="text-slate-100 transition-opacity rounded-md p-2 bg-slate-500 ml-10 opacity-0 group-hover:opacity-70">Edit</Link>}
+              {session.isAdmin && (
+                <>
+                  <Link to={`/entries/${entry._id}/edit`} className="text-slate-100 transition-opacity rounded-md p-2 bg-slate-500 ml-10 opacity-0 group-hover:opacity-100">Edit</Link>
+                </>
+              )}
             </li>
           </>
 

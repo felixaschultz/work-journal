@@ -42,7 +42,10 @@ export default function Page() {
                         value="update"
                         className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md ml-auto"
                     >
-                        {fetcher.state === "submitting" ? entry.published ? "Unpublishing..." : "Publishing.." : entry.published ? "Unpublish" : "Publish"}
+                        {fetcher.state === "submitting" ?
+                            entry.published ? "Unpublishing..." : "Publishing.." 
+                            : entry.published ? "Unpublish" : "Publish"
+                        }
                     </button>
                 </fetcher.Form>
             </section>
