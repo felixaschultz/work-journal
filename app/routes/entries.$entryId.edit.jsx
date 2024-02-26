@@ -54,7 +54,7 @@ export default function Page() {
             </section>
             <h2 className="text-lg my-2">Editing Entry { entry._id }</h2>
             <p>Date: {entry.date}</p>
-            <p>Published: {entry.published ?? "false"}</p>
+            <p>Published: {(entry.published) ? "Offentlig" : "Draft"}</p>
             <h1 className="text-2xl">{entry.text}</h1>
             <p>Type: {entry.type?.replace("-", " ")}</p>
             <EntryForm entry={entry} />
