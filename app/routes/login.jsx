@@ -8,7 +8,7 @@ export default function Login(){
     const actionData = useActionData();
     return (
         <>
-            <div className="grid place-content-center place-items-center h-screen p-8 text-slate-50 bg-slate-900">
+            <div className="grid place-content-center place-items-center h-screen p-8 pt-0 text-slate-50 bg-slate-900">
                 <section className="w-full m-auto mt-10">
                     <h2 className="text-2xl">Login</h2>
                     <Form method="post">
