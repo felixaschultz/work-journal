@@ -5,8 +5,7 @@ import mongoose from "mongoose";
 import { redirect, json } from "@remix-run/node";
 
 export default function Login(){
-    let data = useLoaderData();
-    let actionData = useActionData();
+    const actionData = useActionData();
     return (
         <>
             <div className="grid place-content-center place-items-center h-screen p-8 text-slate-50 bg-slate-900">
@@ -33,7 +32,7 @@ export default function Login(){
 }
 
 export async function action({ request }) {
-    let formData = await request.formData();
+    const formData = await request.formData();
     const mail = formData.get("mail");
     const password = formData.get("password");
 
