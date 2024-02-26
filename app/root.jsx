@@ -40,7 +40,7 @@ export default function App() {
         <Links />
       </head>
       <body className="bg-slate-900">
-        <header className="grid grid-cols-2 p-4">
+        <header className="lg:w-1/2 sm:w-full grid grid-cols-2 p-4 m-auto">
           <h1 className="text-3xl text-slate-50 font-bold">Weekly Journal</h1>
           {
             !session.isAdmin && 
