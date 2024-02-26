@@ -89,7 +89,7 @@ function EntryItem({ entry, type, session }) {
             </li>
           </>
 
-        ))}
+        )).reverse()}
       </ul>
     </div>
   );
