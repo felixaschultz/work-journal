@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Link, redirect, useLoaderData } from "@remix-run/react";
+import { Link, redirect, useLoaderData, useFetcher } from "@remix-run/react";
 import EntryForm from "~/components/EntryForm";
 import { Form } from "@remix-run/react";
 import { getSession } from "~/services/session";
@@ -32,18 +32,19 @@ export const loader = async ({ params, request }) => {
 
 export default function Page() {
     const entry = useLoaderData();
+    const fetcher = useFetcher();
     return (
         <div className="p-8 text-slate-50 lg:w-1/2 sm:w-full m-auto mt-10">
             <section className="grid grid-cols-2 p-4">
                 <Link to="/" className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md">Back</Link>
-                <Form method="post" onSubmit={handleSubmit}>
+                <fetcher.Form method="post" onSubmit={handleSubmit}>
                     <button name="_action"
                         value="update"
                         className="block min-w-max w-fit py-2 px-11 text-slate-100 bg-slate-500 rounded-md ml-auto"
                     >
-                        Publish
+                        {fetcher.state === "submitting" ? entry.published ? "Unpublishing..." : "Publishing.." : entry.published ? "Unpublish" : "Publish"}
                     </button>
-                </Form>
+                </fetcher.Form>
             </section>
             <Form className="text-left" method="post" onSubmit={handleSubmit} >
                 <button name="_action"
@@ -84,7 +85,7 @@ export const action = async ({ request, params }) => {
         return redirect("/");
     }else if(_action === "update"){
         const entry = await mongoose.models.Entry.findById(params.entryId);
-        entry.published = true;
+        entry.published = entry.published ? false : true;
         await entry.save();
         return redirect(`/entries/${params.entryId}/edit`);
     }else{
