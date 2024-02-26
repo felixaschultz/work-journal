@@ -5,7 +5,15 @@ import { Form } from "@remix-run/react";
 import { getSession } from "~/services/session";
 
 const ObjectId = mongoose.Types.ObjectId;
-export const loader = async ({ params }) => {
+export const loader = async ({ params, request }) => {
+    const session = await getSession(request.headers.get("cookie"));
+    if (!session.data.isAdmin) {
+        throw new Response("Not authenticated", {
+            status: 401,
+            statusText: "Not authenticated",
+        });
+    }
+
     if (typeof params.entryId !== "string" || !ObjectId.isValid(params.entryId)) {
         throw new Response("Not found", { status: 404 });
     }
@@ -58,7 +66,7 @@ export const action = async ({ request, params }) => {
     }
     
     const formData = await request.formData();
-    const { _action, date, type, text } = Object.fromEntries(formData);
+    const { _action } = Object.fromEntries(formData);
   
     await new Promise((resolve) => setTimeout(resolve, 1000));
   
