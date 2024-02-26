@@ -1,4 +1,4 @@
-import { Form, useLoaderData, Link, useActionData} from "@remix-run/react";
+import { Form, useActionData} from "@remix-run/react";
 import { commitSession, getSession } from "~/services/session";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
